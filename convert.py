@@ -60,14 +60,17 @@ def bccToSrt(bccFilePath, srtFilePath):
 
 r = parseCommandLineOption(sys.argv)
 
-if r['command'] == 'bcc':
-    print('Converting bcc file "{}" to srt file "{}".'.format(r['in'], r['out']))
-    bccToSrt(r['in'], r['out'])
-    print('Done.')
-elif r['command'] == 'srt':
-    print('Converting srt file "{}" to bcc file "{}".'.format(r['in'], r['out']))
-    print('Sorry, this is not implemented yet.')
-elif r['command'] == 'invalid':
-    print("Invalid options.\n\n{}".format(composeUsage(sys.argv[0])))
-elif r['command'] == 'help':
-    print(composeUsage(sys.argv[0]))
+match r['command']:
+    case 'bcc':
+        print('Converting bcc file "{}" to srt file "{}".'.format(r['in'], r['out']))
+        bccToSrt(r['in'], r['out'])
+        print('Done.')
+    case 'srt':
+        print('Converting srt file "{}" to bcc file "{}".'.format(r['in'], r['out']))
+        print('Sorry, this is not implemented yet.')
+    case 'invalid':
+        print("Invalid options.\n\n{}".format(composeUsage(sys.argv[0])))
+    case 'help':
+        print(composeUsage(sys.argv[0]))
+    case _:
+        print('Unexpected.')
