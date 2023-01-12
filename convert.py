@@ -58,19 +58,20 @@ def bccToSrt(bccFilePath, srtFilePath):
             count += 1
 
 
-r = parseCommandLineOption(sys.argv)
+if __name__ == "__main__":
+    r = parseCommandLineOption(sys.argv)
 
-match r['command']:
-    case 'bcc':
-        print('Converting bcc file "{}" to srt file "{}".'.format(r['in'], r['out']))
-        bccToSrt(r['in'], r['out'])
-        print('Done.')
-    case 'srt':
-        print('Converting srt file "{}" to bcc file "{}".'.format(r['in'], r['out']))
-        print('Sorry, this is not implemented yet.')
-    case 'invalid':
-        print("Invalid options.\n\n{}".format(composeUsage(sys.argv[0])))
-    case 'help':
-        print(composeUsage(sys.argv[0]))
-    case _:
-        print('Unexpected.')
+    match r['command']:
+        case 'bcc':
+            print('Converting bcc file "{}" to srt file "{}".'.format(r['in'], r['out']))
+            bccToSrt(r['in'], r['out'])
+            print('Done.')
+        case 'srt':
+            print('Converting srt file "{}" to bcc file "{}".'.format(r['in'], r['out']))
+            print('Sorry, this is not implemented yet.')
+        case 'invalid':
+            print("Invalid options.\n\n{}".format(composeUsage(sys.argv[0])))
+        case 'help':
+            print(composeUsage(sys.argv[0]))
+        case _:
+            print('Unexpected.')
