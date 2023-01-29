@@ -1,3 +1,4 @@
+from srt import secondsToTimeStr
 import sys
 import json
 
@@ -31,16 +32,6 @@ def parseCommandLineOption(argv):
             'in': argv[2],
             'out': argv[3],
         }
-
-
-def secondsToTimeStr(t):
-    ms = int(t * 1000) % 1000
-    s = int(t)
-    m = s // 60
-    h = m // 60
-    m %= 60
-    s %= 60
-    return '{:0>2}:{:0>2}:{:0>2},{:0>3}'.format(h, m, s, ms)
 
 
 def bccToSrt(bccFilePath, srtFilePath):
