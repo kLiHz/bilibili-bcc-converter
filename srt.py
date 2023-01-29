@@ -24,7 +24,7 @@ def composeUsage(path: str) -> str:
 '''SRT Tool v0.0.1
 
 Usage:
-    python3 {} <command> [in] [out] <args>
+    python3 {} <command> [in] [out] [...args]
 
 Commands:
 
@@ -82,19 +82,44 @@ def reNumberSRT(inFilePath: str, outFilePath: str):
         f.writelines(l)
 
 
+def shiftTimeStr(s: str, seconds: float):
+    return secondsToTimeStr(timeStrToSeconds(s) + seconds)
+
+
+def shiftTimePeriodStr(s: str, seconds: float) -> str:
+    ARROW = ' --> '
+    l = s.split(ARROW)
+    return shiftTimeStr(l[0], seconds) + ARROW + shiftTimeStr(l[1], seconds)
+
+
+def shiftSRT(inFilePath: str, outFilePath: str, seconds: float):
+    l = []
+    for i in readSubtitles(inFilePath):
+        i[1] = shiftTimePeriodStr(i[1][:-1], seconds) + '\n'
+        l += i
+    with open(outFilePath, 'w') as f:
+        f.writelines(l)
+
+
 if __name__ == "__main__":
     
     r = parseCommandLineOptions(sys.argv)
 
     match r['command']:
         case 'shift':
-            print('Sorry, this is not implemented yet.')
+            if len(r['rest']) < 1:
+                print('Missing arguments.\n\n{}'.format(composeUsage(sys.argv[0])))
+            else:
+                arg = float(r['rest'][0])
+                print('Shifting srt file "{}" to "{}" for {} seconds.'.format(r['in'], r['out'], arg))
+                shiftSRT(r['in'], r['out'], arg)
+                print('Done.')
         case 'renum':
             print('Re-numbering srt file "{}" to "{}".'.format(r['in'], r['out']))
             reNumberSRT(r['in'], r['out'])
             print('Done.')
         case 'invalid':
-            print("Invalid options.\n\n{}".format(composeUsage(sys.argv[0])))
+            print('Invalid options.\n\n{}'.format(composeUsage(sys.argv[0])))
         case 'help':
             print(composeUsage(sys.argv[0]))
         case _:
